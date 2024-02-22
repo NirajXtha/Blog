@@ -22,15 +22,18 @@ class PostController extends Controller
     }
     public function store(Request $request){
         $request->validate([
-            'title' =>'required',
-            'description' =>'required',
+            'title' =>['required','min:5'],
+            'description' =>['required','min:10'],
         ]);
-
+        try{
         $this->model->create([
             'title' => $request->title,
             'description' => $request->description,
         ]);
         return redirect()->route('post.view')->with('success', 'Post added successfully');
+        }catch(Exception $e){
+            return redirect()->back()->withInput()->withErrors(['error' => 'An unexpected error Occurred! Please contact us to resolve this problem.']);
+        }
     }
 
     public function edit($postid){
@@ -50,30 +53,30 @@ class PostController extends Controller
             return redirect()->route('post.view')->with('error', 'Post not found');
         }
         $request->validate([
-            'title' =>'required',
-            'description' =>'required',
+            'title' =>['required','min:5'],
+            'description' =>['required','min:10'],
         ]);
-
-        $post->update([
-            'title' => $request->input('title'),
-            'description' => $request->input('description'),
-        ]);
-
-        return redirect()->route('post.view')->with('success', 'Post edited successfully');
-
+        try{
+            $post->update([
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+            ]);
+            return redirect()->route('post.view')->with('success', 'Post edited successfully');
+        }catch(Exception $e){
+            return redirect()->back()->withInput()->withErrors(['error' => 'An unexpected error Occurred! Please contact us to resolve this problem.']);
+        }
 
     }
 
     public function delete($postid){
         $post = Post::find($postid);
-        if(!$post){
-            return redirect()->route('post.view')->with('error', 'Post not found');
-        }
 
         $post->delete();
-
-        return redirect()->route('post.view')->with('success', 'Post deleted successfully');
-
+        $delete_msg = array (
+            'status' => true,
+            'message' => 'Deleted'
+        );
+        return json_encode($delete_msg);
 
     }
 

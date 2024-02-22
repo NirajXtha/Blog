@@ -4,7 +4,20 @@
         {{ __('Create Post') }}
     </div>
 
+    @php
+        $error = '';
+    @endphp
+
+    @if($errors->any())
+        @foreach($errors->all() as $er)
+            @php
+                $error .= $er . '</br>';
+            @endphp
+        @endforeach
+    @endif
+    
     <!-- Session Status -->
+    <input id="error" type="text" value="{{ $error }}"  required hidden />
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <form method="POST" action="{{ route('post.create') }}">
         @csrf
@@ -29,3 +42,18 @@
     </form>
     </div>
 </x-app-layout>
+
+<script>
+    $(document).ready(function() {
+
+        if ($('#error').val() != '') {
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: $('#error').val(),
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+</script>

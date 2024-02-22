@@ -1,10 +1,21 @@
 <x-app-layout>
     <div class="container">
     <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Create Post') }}
+        {{ __('Edit Post') }}
     </div>
+    @php
+        $error = '';
+    @endphp
 
+    @if($errors->any())
+        @foreach($errors->all() as $er)
+            @php
+                $error .= $er . '</br>';
+            @endphp
+        @endforeach
+    @endif
     <!-- Session Status -->
+    <input type="text" id="error" value="{{ $error}}" readonly hidden>
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <form method="POST" action="{{ route('post.update' , ['postid' => $post->id]) }}">
         @csrf
@@ -29,3 +40,17 @@
     </form>
     </div>
 </x-app-layout>
+
+<script>
+    $(document).ready(function() {
+        if ($('#error').val() != '') {
+            Swal.fire({
+                position: "top-end",
+                icon: "error",
+                title: $('#error').val(),
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+</script>
