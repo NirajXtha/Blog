@@ -21,18 +21,6 @@
             <textarea id="description" rows="10" class="block mt-1 w-full"  name="description"  required autofocus>{{ $post->description }}</textarea>
         </div>
 
-           <!-- Groups -->
-           <div>
-           <label for="groups" >{{ __('Groups') }}</label>
-           <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="groups" name="groups[]" multiple>
-                <option value="">Select Group</option>
-                @foreach($groups as $group)
-                    <option value="{{ $group->id }}" <?php in_array($group->id, $post->groups) ? 'selected' : '' ?>>{{ $group->title }}</option>
-                 @endforeach
-            </select>
-        </div>
-
-
         <div class="flex items-center justify-end mt-4">
             <x-primary-button>
                 {{ __('Submit') }}
@@ -41,12 +29,3 @@
     </form>
     </div>
 </x-app-layout>
-
-
-
-<script>
-    $(document).ready(function() {
-
-        $('#groups').select2();
-    });
-</script>

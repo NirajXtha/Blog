@@ -24,22 +24,6 @@
                 <th>Action</th>
             </thead>
             <tbody>
-                @php
-                $serialNumber = 1;
-                @endphp
-                @foreach ($posts as $post)
-                <tr>
-                    <td>{{ $serialNumber++ }}</td>
-                    <td>{{ $post->title }}</td>
-                    <td>{{ $post->description }}</td>
-                    <td>
-                        <a href="{{ route('post.edit',['postid' => $post->id]) }}" class="btn btn-primary mb-4">Edit</a>
-                        <span class="btn btn-danger mb-4 delete-button" data-id="{{ $post->id }}">Delete</span>
-                        <a href="{{ route('post.viewpost',['postid' => $post->id]) }}" class="btn btn-danger mb-">Add Comment</a>
-                    </td>
-
-                </tr>
-                @endforeach
             </tbody>
         </table>
     </div>
@@ -47,7 +31,29 @@
 
 <script>
     $(document).ready(function() {
-        new DataTable('#postTable');
+        fetchDataList();
+        function fetchDataList() {
+            var table = $('#postTable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                url:  '/admin/post/serversidelist/',
+            },
+                    "columnDefs": [
+                        { className: " action-btn-gap ", "targets": [-1] }
+                    ],
+                columns: [
+                    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                    {data: 'title', name: 'title'},
+                    {data: 'description', name: 'description'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+
+            });
+        }
+
+
         if ($('#success').val() != '') {
             Swal.fire({
                 position: "top-end",

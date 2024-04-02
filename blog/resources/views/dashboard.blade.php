@@ -5,13 +5,9 @@
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+    <div class="container">
+        <input type="text" id="success" value="{{ session('success')}}" readonly hidden>
+        <input type="text" id="error" value="{{ session('error')}}" readonly hidden>
+        <a href="{{ route('post.view') }}" class="btn btn-primary mb-4">Posts</a>
     </div>
 </x-app-layout>
